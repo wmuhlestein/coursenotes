@@ -1,0 +1,142 @@
+\documentclass{report} % 10pt
+\input{header}
+
+% Homework Specific Information
+\newcommand{\hmwkTitle}{Homework 1}
+\newcommand{\hmwkSubTitle}{}
+\newcommand{\hmwkDueDate}{Due Date}
+\newcommand{\hmwkClass}{Course Title}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{Instructor Name}
+\newcommand{\hmwkAuthor}{Student Name}
+\newcommand{\hmwkAuthorEmail}{Student Email}
+
+% These commands set the document properties for the PDF output. Needs the hyperref package.
+\hypersetup
+{
+    colorlinks,
+    linkcolor={black},
+    citecolor={black},
+    filecolor={black},
+    urlcolor={blue},
+    pdfauthor={\hmwkAuthor <\mailto{\hmwkAuthorEmail}{\hmwkAuthorEmail}>},
+    pdfsubject={\hmwkClass},
+    pdftitle={\hmwkTitle},
+    pdfkeywords={},
+    pdfstartpage={1},
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make title
+\title{\vspace{2in}\textmd{\textbf{\hmwkClass:\ \hmwkTitle\ifthenelse{\equal{\hmwkSubTitle}{}}{}{\\\hmwkSubTitle}}}\\\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}\vspace{3in}}
+\date{}
+\author{\hmwkAuthor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{spacing}{1.1}
+\maketitle
+% Uncomment the \tableofcontents and \newpage lines to get a Contents page
+% Uncomment the \setcounter line as well if you do NOT want subsections
+%       listed in Contents
+%\setcounter{tocdepth}{1}
+%\tableofcontents
+%\newpage
+%
+% When problems are long, it may be desirable to put a \newpage or a
+% %\clearpage before each homeworkProblem environment
+
+% This is to add a blank page after the title page. It looks better when
+% printing double-sided.
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%
+% Problem 1.
+%%%%%%%%%%%%%%%%
+\begin{homeworkProblem}
+Consider a discrete-time system given by the controllable and observable $n$th order state space realization
+\begin{align}
+\label{eq:ss}
+\begin{split}
+x(k+1) &= Fx(k)+Gu(k) \\
+y(k) &= Cx(k) + Du(k)
+\end{split}
+\end{align}
+and consider the following assignments:
+
+\begin{homeworkSection}{1.1}
+Give an expression for the impulse response coefficients $g(l)$ in
+\begin{align}
+\begin{split}
+y(k) = G_0(q)u(k) \\
+G_0(q) = \sum_{l=0}^\infty g(l)q^{-l}
+\end{split}
+\end{align}
+in terms of the state space matrices $F$, $G$, $C$ and $D$ given in (\ref{eq:ss}).
+\newline
+\problemAnswer{
+To go from a state space to the impulse response representation we apply an impulse as input where
+$$u(l) = \begin{cases} 1, & l=0 \\ 0, & l\neq 0 \end{cases}$$
+Substituting this into (\ref{eq:ss}) gives
+\begin{align*}
+y(0) &= Cx(0) + Du(0) = D \\
+x(1) &= Fx(0) + Gu(0) = G \\
+y(1) &= Cx(1) + Du(1) = CG \\
+x(2) &= Fx(1) + Gu(1) = FG \\
+y(2) &= Cx(2) + Du(2) = CFG \\
+x(3) &= Fx(2) + Gu(2) = F^2G \\
+y(3) &= Cx(3) + Du(3) = CF^2G \\
+&\vdots \\
+g(l) &= \begin{cases} D, & l=0 \\ CF^{l-1}G, & l\neq 0 \end{cases}
+\end{align*}
+}
+\end{homeworkSection}
+
+\begin{homeworkSection}{1.2}
+Organize the impulse response coefficients $g(l)$ in a matrix of the form
+\begin{align*}
+H =
+\left[\begin{array}{c c c c}
+g(1) & g(2) & \cdots & g(N_2) \\
+g(2) & g(3) & \cdots & g(N_2+1) \\
+\vdots & \vdots & \ddots & \vdots \\
+g(N_1) & g(N_1+1) & \cdots & g(N_1+N_2-1)
+\end{array}\right]
+\end{align*}
+where $N_1,N_2>n$. Knowing that $[F,G,C]$ is controllable/observable, show that $\text{rank}(H)=n$, where $n$ is the order of the state space model.
+\newline
+\problemAnswer{
+Recall that the observability matrix, $\mathcal{O}$, is
+$$\mathcal{O} = \left[\begin{array}{c} C \\ CF \\ CF^2 \\ \vdots \\ CF^{N_1-1} \end{array}\right]$$
+and the controllability matrix, $\mathcal{C}$, is
+$$\mathcal{C} = \left[\begin{array}{c c c c c} B & FB & F^2B & \cdots & F^{N_2-1}B \end{array}\right]$$
+Letting $H=\mathcal{O}\cdot\mathcal{C}$ gives
+$$H = \left[\begin{array}{c c c c c}
+CG & CFG & CF^2G & \cdots & CF^{N_2}G \\
+CFG & CF^2G & CF^3G & \cdots & CF^{N_2+1}G \\
+CF^2G & CF^3G & CF^4G & \cdots & CF^{N_2+2}G \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+CF^{N_1}G & CF^{N_1+1}G & CF^{N_1+2}G & \cdots & CF^{N_1+N_2-1}G
+\end{array}\right]
+$$
+Then, looking at the Markov parameters we have, using the results from Problem 1.1,
+\begin{align*}
+g(1) &= CG \\
+g(2) &= CFG \\
+g(3) &= CF^2G \\
+&\vdots \\
+g(l) &= CF^{l-1}G
+\end{align*}
+which are exactly the entries of $H=\mathcal{O}\cdot\mathcal{C}$, which is exactly the same as the matrix $H$ we are being asked to organize. Knowing that $[F,G,C]$ is controllable and observable tells us that $\mathcal{O}$ has full column rank $n$ and $\mathcal{C}$ has full row rank $n$. Since $N_1,N_2>n$ and knowing the rank of $\mathcal{O}$ and $\mathcal{C}$ is only $n$ we can say that $\text{rank}(H)=n$.
+}
+\end{homeworkSection}
+\end{homeworkProblem}
+
+\end{spacing}
+% \bibliographystyle{plain}
+% \bibliography{mybib}
+\end{document}
