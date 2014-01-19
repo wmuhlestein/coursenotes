@@ -1,0 +1,71 @@
+% Only the next five fields need to be edited.
+\newcommand{\lecAuth}{Lecturer Name}
+\newcommand{\scribe}{Scribe Name}
+\newcommand{\authEmail}{Lecturer Email}
+\newcommand{\scribeEmail}{Scribe Email}
+\newcommand{\course}{Course Title}
+
+\address{School Information}
+
+% Adds a hyperlink to an email address.
+\newcommand{\mailto}[2]{\href{mailto:#1}{#2}}
+
+% These commands set the document properties for the PDF output. Needs the hyperref package.
+\hypersetup
+{
+    colorlinks,
+    linkcolor={black},
+    citecolor={black},
+    filecolor={black},
+    urlcolor={black},
+    pdfauthor={\scribe <\mailto{\scribeEmail}{\scribeEmail}>},
+    pdfsubject={\course},
+	pdftitle={Course Title},
+    pdfkeywords={},
+    pdfstartpage={1},
+}
+
+% Includes a figure
+% The first parameter is the label, which is also the name of the figure
+%   with or without the extension (e.g., .eps, .fig, .png, .gif, etc.)
+%   IF NO EXTENSION IS GIVEN, LaTeX will look for the most appropriate one.
+%   This means that if a DVI (or PS) is being produced, it will look for
+%   an eps. If a PDF is being produced, it will look for nearly anything
+%   else (gif, jpg, png, et cetera). Because of this, when I generate figures
+%   I typically generate an eps and a png to allow me the most flexibility
+%   when rendering my document.
+% The second parameter is the width of the figure normalized to column width
+%   (e.g. 0.5 for half a column, 0.75 for 75% of the column)
+% The third parameter is the caption.
+\newcommand{\scalefig}[3]{
+  \begin{figure}[ht!]
+    % Requires \usepackage{graphicx}
+    \centering
+  \fbox{
+      \includegraphics[width=#2\columnwidth]{#1}
+  }
+    %%% I think \captionwidth (see above) can go away as long as
+    %%% \centering is above
+    %\captionwidth{#2\columnwidth}%
+    \caption{#3}
+    \label{#1}
+  \end{figure}}
+
+% Includes a MATLAB script.
+% The first parameter is the label, which also is the name of the script
+%   without the .m.
+% The second parameter is the optional caption.
+\newcommand{\matlabscript}[2]
+  {\begin{itemize}\item[]\lstinputlisting[caption=#2,label=#1]{#1.m}\end{itemize}}
+
+% Example environment.
+\newtheoremstyle{example}{\topsep}{\topsep} %
+     {}%         Body font
+     {}%         Indent amount (empty = no indent, \parindent = para indent)
+     {\bfseries}% Thm head font
+     {}%        Punctuation after thm head
+     {\newline}%     Space after thm head (\newline = linebreak)
+     {\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}%         Thm head spec
+
+   \theoremstyle{example}
+   \newtheorem{example}{Example}[section]
